@@ -1,0 +1,51 @@
+Presentation about shiny app "Sample size calculation for bioequivalence trials (2x2x2 crossover design)"
+========================================================
+author: Andrey Ogurtsov
+date: Sun Oct 26 13:41:10 2014
+
+Background
+========================================================
+
+For bioequivalence studies, it is often for us to show the average bioequivalence by declaring the bioequivalence if the 90% confidence interval of the geometric least squares mean ratio is within 80-125%. The associated study design is typically 2x2x2 cross over design with reasonable sample size (for example, 12 subjects, 24 subjects).
+This sample size must be calculated dependently of intra-subject variability of AUC/Cmax, estimated mean difference of AUC/Cmax and required power (typically 80% or 90%).
+
+
+Used approach
+========================================================
+
+This app is implementation of method described in "Sample Size Calculations in Clinical Research" book in accordance with regulatory requirements:
+$$ \frac {(z_{\alpha}+z_{\beta/2)})^2\sigma^2} {2(\delta-|\epsilon|)^2} $$
+
+Source code
+========================================================
+
+Sample size calculation function lools like this:
+
+```r
+sampleSize <- function(sigma, epsilon, power) {
+      2*ceiling((1.64+qnorm((1-power/100)/2, 0, 1, lower.tail=F, log.p=F))^2*
+                    (sigma/100)^2/(2*(0.223-epsilon/100)^2))
+}
+```
+`sigma` is intra-subject variability of AUC/Cmax, %
+
+`epsilon` is mean difference of AUC/Cmax, %
+
+`power` is required power of analysis, %
+
+Demo results
+========================================================
+
+
+```r
+sampleSize <- function(sigma, epsilon, power) {
+      2*ceiling((1.64+qnorm((1-power/100)/2, 0, 1, lower.tail=F, log.p=F))^2*
+                    (sigma/100)^2/(2*(0.223-epsilon/100)^2))
+}
+```
+Sample size is
+
+```
+[1] 30
+```
+
